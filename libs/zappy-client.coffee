@@ -1,4 +1,5 @@
 net = require 'net'
+colors = require 'colors'
 events = require 'events'
 util = require 'util'
 Q = require 'q'
@@ -17,6 +18,7 @@ class Client extends events.EventEmitter
         @buffer = messages[messages.length - 1]
 
     _parseMessage: (message) ->
+        console.error ("< " + message).blue.bold
         @emit "message", message
         if @_callbackQueue.length
             @_callbackQueue.shift()(message)
@@ -26,6 +28,7 @@ class Client extends events.EventEmitter
         @_callbackQueue.push (data) ->
             deferred.resolve data
         @_connection.write message + "\n"
+        console.error ("> " + message).red.bold
         return deferred.promise
 
     next: () ->

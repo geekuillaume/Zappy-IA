@@ -1,5 +1,5 @@
-normalize = (value, max, min) ->
-    while value < (min || 0)
+normalize = (value, max, min = 0) ->
+    while value < min
         value += max
     while value > max
         value -= max
@@ -15,15 +15,14 @@ class Map
             for j in [0..@height]
                 @_content[i][j] = []
 
-    set: (x, y, content) ->
-        x = normalize x
-        y = normalize y
-        @_content[x][y] = types
-        console.log "Setting case %dx%d to %d", x, y, content
+    set: (x, y, content) =>
+        x = normalize x, @width
+        y = normalize y, @height
+        @_content[x][y] = content
 
-    get: (x, y) ->
-        x = normalize x
-        y = normalize y
+    get: (x, y) =>
+        x = normalize x, @width
+        y = normalize y, @height
         return @_content[x][y]
 
 module.exports = Map
